@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>پی پی پی ڈیجیٹل سہراب گوٹھ - ممبرشپ پورٹل</title>
+    <title>پی پی پی ڈیجیٹل سہراب گوٹھ</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
     <style>
@@ -12,73 +12,47 @@
         .container { max-width: 600px; margin: auto; }
         .header { background: linear-gradient(to right, var(--red), var(--black), var(--green)); color: white; padding: 25px; text-align: center; border-radius: 0 0 20px 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
         .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-top: 20px; border-top: 4px solid var(--red); }
-        label { font-weight: bold; display: block; margin-top: 15px; color: #333; }
-        input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; }
-        .signature-pad { border: 1px solid #ccc; background: #fff; border-radius: 8px; margin-top: 5px; }
-        canvas { width: 100%; height: 120px; }
+        input, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; }
         .btn-main { background: var(--black); color: white; border: 2px solid var(--red); padding: 15px; width: 100%; border-radius: 50px; font-weight: bold; cursor: pointer; font-size: 18px; margin-top: 20px; }
-        #idCard { display: none; background: white; border: 3px solid var(--black); border-radius: 15px; overflow: hidden; margin-top: 25px; position: relative; }
+        #idCard { display: none; background: white; border: 3px solid var(--black); border-radius: 15px; overflow: hidden; margin-top: 25px; }
         .card-head { background: linear-gradient(to left, var(--red), var(--black), var(--green)); color: white; padding: 15px; text-align: center; }
-        .card-body { display: flex; padding: 15px; gap: 15px; }
-        .member-img { width: 110px; height: 140px; border: 2px solid #ddd; object-fit: cover; border-radius: 8px; }
-        .info { flex: 1; font-size: 14px; }
-        .stamp { position: absolute; bottom: 10px; left: 10px; width: 85px; height: 85px; border: 2px dashed #1a237e; border-radius: 50%; color: #1a237e; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 8px; font-weight: bold; transform: rotate(-15deg); opacity: 0.6; }
-        .slogan { background: #eee; text-align: center; font-size: 11px; padding: 5px; font-weight: bold; }
+        .card-body { display: flex; padding: 15px; gap: 15px; align-items: center; }
+        .member-img { width: 100px; height: 120px; border: 2px solid #ddd; object-fit: cover; border-radius: 5px; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <h1 style="margin:0;">پی پی پی ڈیجیٹل سہراب گوٹھ</h1>
-        <p style="margin:5px 0;">میدانِ عمل ہو یا ڈیجیٹل محاذ، خدمتِ خلق ہمارا شعار</p>
+        <h1>پی پی پی ڈیجیٹل سہراب گوٹھ</h1>
+        <p>عوامی خدمت اور ڈیجیٹل محاذ کی آواز</p>
     </div>
 
     <div class="card">
-        <h3>📝 ممبرشپ و بیانِ حلفی</h3>
-        <input type="text" id="name" placeholder="ممبر کا مکمل نام">
+        <h3>📝 ممبر رجسٹریشن</h3>
+        <input type="text" id="name" placeholder="نام">
         <input type="number" id="phone" placeholder="واٹس ایپ نمبر">
-        <textarea id="address" placeholder="مکمل پتہ (ایڈریس)"></textarea>
-        <label>سابقہ سیاسی سرگرمیاں اور عوامی خدمات:</label>
-        <input type="text" id="oldParty" placeholder="سابقہ پارٹی (اگر کوئی ہے)">
-        <textarea id="services" placeholder="آپ نے اب تک کیا عوامی خدمات انجام دی ہیں؟"></textarea>
-        <label>سوشل میڈیا لنک:</label>
-        <input type="text" id="socialLink" placeholder="فیس بک / ٹویٹر / ٹک ٹاک لنک">
-        <label>تصویر اپ لوڈ کریں:</label>
+        <textarea id="address" placeholder="علاقہ / پتہ"></textarea>
         <input type="file" id="photoFile" accept="image/*" onchange="previewImg(event)">
-        <label>اصل دستخط (اسکرین پر کریں):</label>
-        <div class="signature-pad">
-            <canvas id="canvas"></canvas>
-            <button type="button" onclick="pad.clear()">صاف کریں</button>
+        
+        <label>دستخط کریں:</label>
+        <div style="border:1px solid #ccc; background:#fff; margin-top:5px;">
+            <canvas id="canvas" style="width:100%; height:100px;"></canvas>
         </div>
-        <div style="background:#fff8e1; padding:12px; border-radius:10px; border:1px solid #ff8f00; font-size:12px; margin-top:15px;">
-            <input type="checkbox" id="agree" style="width:auto;"> 
-            <strong>بیانِ حلفی:</strong> میں حلف دیتا ہوں کہ میں کسی غیر قانونی سرگرمی یا بھتہ خوری میں ملوث نہیں ہوں۔ میں پارٹی احکامات کو سوشل میڈیا پر فعال کرنے کا پابند رہوں گا۔
-        </div>
-        <button class="btn-main" onclick="generate()">رجسٹر ہوں اور کارڈ حاصل کریں</button>
+
+        <button class="btn-main" id="submitBtn" onclick="generate()">ڈیجیٹل کارڈ اور ریکارڈ جمع کریں</button>
     </div>
 
     <div id="idCard">
-        <div class="card-head">
-            <h2 style="margin:0; font-size:18px;">پی پی پی ڈیجیٹل سہراب گوٹھ</h2>
-            <small>Pakistan Peoples Party - Sohrab Goth</small>
-        </div>
+        <div class="card-head"><h4>پی پی پی ڈیجیٹل سہراب گوٹھ</h4></div>
         <div class="card-body">
             <img id="outPhoto" class="member-img">
-            <div class="info">
+            <div style="flex:1; font-size: 14px;">
                 <p><strong>نام:</strong> <span id="outName"></span></p>
-                <p><strong>رابطہ:</strong> <span id="outPhone"></span></p>
                 <p><strong>آئی ڈی:</strong> <span id="outId"></span></p>
-                <p><strong>تاریخ:</strong> <span id="outDate"></span></p>
-                <div style="margin-top:5px;">
-                    <small>دستخط ممبر:</small><br>
-                    <img id="outSign" style="width:100px; height:30px; border-bottom:1px solid #000;">
-                </div>
             </div>
             <div id="qr"></div>
         </div>
-        <div class="slogan">"میدانِ عمل ہو یا ڈیجیٹل محاذ، خدمتِ خلق ہمارا شعار"</div>
-        <div class="stamp">آفس آف دی کونسلر<br>سہراب گوٹھ ٹاؤن</div>
     </div>
 </div>
 
@@ -86,6 +60,8 @@
     const canvas = document.getElementById('canvas');
     const pad = new SignaturePad(canvas);
     let photoData = "";
+    // آپ کا ویب ایپ یو آر ایل
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbyl8xZ-eY_tAK4zzM8bGkzKfIrN7xfRirv0WeKiDy9RVazj4rEYII5DKXtGxJaEcY/exec';
 
     function previewImg(e) {
         const reader = new FileReader();
@@ -93,35 +69,51 @@
         reader.readAsDataURL(e.target.files);
     }
 
-    function generate() {
+    async function generate() {
         const name = document.getElementById('name').value;
         const phone = document.getElementById('phone').value;
-        const agree = document.getElementById('agree').checked;
+        const address = document.getElementById('address').value;
+        const memberId = "SG-" + Math.floor(1000 + Math.random() * 9000);
+        const btn = document.getElementById('submitBtn');
 
-        if(!name || !phone || !agree || pad.isEmpty() || !photoData) {
-            alert("براہ کرم تمام معلومات فراہم کریں، تصویر اور دستخط لازمی ہیں۔");
+        if(!name || !phone || !photoData) {
+            alert("براہ کرم تمام خانے پُر کریں۔");
             return;
         }
 
-        document.getElementById('outName').innerText = name;
-        document.getElementById('outPhone').innerText = phone;
-        document.getElementById('outId').innerText = "SG-DIGI-" + Math.floor(1000 + Math.random() * 9000);
-        document.getElementById('outPhoto').src = photoData;
-        document.getElementById('outSign').src = pad.toDataURL();
-        document.getElementById('outDate').innerText = new Date().toLocaleDateString();
+        btn.innerText = "جمع ہو رہا ہے...";
+        btn.disabled = true;
 
-        document.getElementById('idCard').style.display = 'block';
+        const data = { name, phone, address, memberId };
 
-        document.getElementById('qr').innerHTML = "";
-        new QRCode(document.getElementById("qr"), {
-            text: `PPP Digital Sohrab Goth\nMember: ${name}\nID: ${document.getElementById('outId').innerText}\nVerified: Yes`,
-            width: 75, height: 75
-        });
+        try {
+            // گوگل شیٹ میں ڈیٹا بھیجنا
+            await fetch(scriptURL, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify(data)
+            });
 
-        // واٹس ایپ میسج بھیجنے کی لاجک
-        const msg = `*نئی ممبرشپ درخواست*\nنام: ${name}\nفون: ${phone}\nحلف نامہ: منظور شدہ ✅\n_پی پی پی ڈیجیٹل سہراب گوٹھ_`;
-        const waUrl = `https://wa.me/923000000000?text=${encodeURIComponent(msg)}`; // یہاں اپنا نمبر لکھیں
-        setTimeout(() => { window.open(waUrl, '_blank'); }, 2000);
+            // کارڈ دکھانا
+            document.getElementById('outName').innerText = name;
+            document.getElementById('outId').innerText = memberId;
+            document.getElementById('outPhoto').src = photoData;
+            document.getElementById('idCard').style.display = 'block';
+            new QRCode(document.getElementById("qr"), { text: memberId, width: 60, height: 60 });
+
+            alert("مبارک ہو! ریکارڈ شیٹ میں جمع ہو گیا ہے اور کارڈ تیار ہے۔");
+            
+            // واٹس ایپ اطلاع
+            const waMsg = `*نئی رجسٹریشن*\nنام: ${name}\nفون: ${phone}\nآئی ڈی: ${memberId}`;
+            window.open(`https://wa.me/923112221014?text=${encodeURIComponent(waMsg)}`, '_blank');
+
+        } catch (error) {
+            console.error('Error!', error.message);
+            alert("ڈیٹا جمع کرنے میں مسئلہ آیا، لیکن کارڈ بن گیا ہے۔");
+        }
+        
+        btn.innerText = "ڈیجیٹل کارڈ اور ریکارڈ جمع کریں";
+        btn.disabled = false;
     }
 </script>
 
