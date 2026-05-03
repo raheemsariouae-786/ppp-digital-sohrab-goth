@@ -3,23 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>پی پی پی ڈیجیٹل سہراب گوٹھ</title>
+    <title>پی پی پی ڈیجیٹل سہراب گوٹھ - ممبرشپ</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
     <style>
         :root { --red: #d32f2f; --black: #000000; --green: #2e7d32; }
         body { font-family: 'Segoe UI', Tahoma, Arial; background: #f4f4f9; direction: rtl; margin: 0; padding: 10px; }
-        .container { max-width: 600px; margin: auto; }
-        .header { background: linear-gradient(to right, var(--red), var(--black), var(--green)); color: white; padding: 20px; text-align: center; border-radius: 0 0 20px 20px; }
-        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-top: 20px; border-top: 4px solid var(--red); }
-        input, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-size: 16px; }
-        .affidavit-box { background: #fff3cd; padding: 15px; border: 1px solid #ffeeba; border-radius: 10px; margin: 15px 0; font-size: 14px; color: #856404; line-height: 1.6; }
-        .signature-pad { border: 1px solid #ccc; background: #fff; margin-top: 5px; border-radius: 8px; cursor: crosshair; }
-        .btn-main { background: var(--black); color: white; border: 2px solid var(--red); padding: 15px; width: 100%; border-radius: 50px; font-weight: bold; cursor: pointer; font-size: 18px; margin-top: 20px; }
-        #idCard { display: none; background: white; border: 3px solid var(--black); border-radius: 15px; overflow: hidden; margin-top: 25px; position: relative; }
-        .card-head { background: linear-gradient(to left, var(--red), var(--black), var(--green)); color: white; padding: 10px; text-align: center; font-size: 14px; }
-        .card-body { display: flex; padding: 15px; gap: 15px; align-items: center; }
-        .member-img { width: 90px; height: 110px; border: 2px solid #ddd; object-fit: cover; border-radius: 5px; }
+        .container { max-width: 650px; margin: auto; }
+        .header { background: linear-gradient(to right, var(--red), var(--black), var(--green)); color: white; padding: 20px; text-align: center; border-radius: 10px; }
+        .card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-top: 15px; border-top: 5px solid var(--red); }
+        h4 { color: var(--red); margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
+        label { display: block; font-weight: bold; margin-top: 10px; font-size: 14px; }
+        input, textarea, select { width: 100%; padding: 12px; margin: 5px 0 15px 0; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; }
+        .signature-area { border: 2px dashed #ccc; background: #fff; border-radius: 8px; position: relative; }
+        canvas { width: 100%; height: 150px; cursor: crosshair; }
+        .clear-btn { background: #f44336; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 12px; margin-bottom: 10px; }
+        .btn-main { background: var(--black); color: white; border: 2px solid var(--red); padding: 18px; width: 100%; border-radius: 50px; font-weight: bold; cursor: pointer; font-size: 18px; transition: 0.3s; }
+        .btn-main:hover { background: var(--red); }
+        #idCard { display: none; background: white; border: 3px solid var(--black); border-radius: 15px; overflow: hidden; margin-top: 25px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
     </style>
 </head>
 <body>
@@ -27,47 +28,63 @@
 <div class="container">
     <div class="header">
         <h2>پی پی پی ڈیجیٹل سہراب گوٹھ</h2>
-        <p>عوامی خدمت اور ڈیجیٹل محاذ کی آواز</p>
+        <p>پاکستان پیپلز پارٹی - بااختیار عوام، ڈیجیٹل پاکستان</p>
     </div>
 
     <div class="card">
-        <h3>📝 ممبر رجسٹریشن فارم</h3>
-        <input type="text" id="name" placeholder="مکمل نام">
-        <input type="number" id="phone" placeholder="واٹس ایپ نمبر">
-        <textarea id="address" placeholder="علاقہ / پتہ"></textarea>
-        <label>اپنی تصویر اپ لوڈ کریں:</label>
-        <input type="file" id="photoFile" accept="image/*" onchange="previewImg(event)">
+        <div id="registrationForm">
+            <h4>👤 ذاتی معلومات (لازمی)</h4>
+            <input type="text" id="name" placeholder="ممبر کا مکمل نام" required>
+            <input type="number" id="cnic" placeholder="شناختی کارڈ نمبر (بغیر ڈیش)" required>
+            <input type="number" id="phone" placeholder="واٹس ایپ نمبر" required>
+            <textarea id="address" placeholder="مکمل پتہ" required></textarea>
 
-        <div class="affidavit-box">
-            <strong>بیانِ حلفی:</strong> میں اقرار کرتا ہوں کہ میرا تعلق پاکستان پیپلز پارٹی سے ہے، میرا کردار کلین ہے، میں کسی غیر قانونی سرگرمی میں ملوث نہیں رہا۔ میں تمام پارٹی احکامات کو اپنے سوشل اکاؤنٹس پر شیئر کرنے اور عوامی خدمت کا پابند ہوں۔
-            <div style="margin-top:10px;">
-                <input type="checkbox" id="agree" style="width: auto;"> <label for="agree">میں متفق ہوں</label>
+            <h4>📍 حلقہ کی معلومات</h4>
+            <input type="text" id="uc_number" placeholder="یو سی (UC) نمبر" required>
+            <input type="text" id="ward_number" placeholder="وارڈ نمبر" required>
+
+            <h4>📱 سوشل میڈیا اکاؤنٹس (نشاندہی کریں)</h4>
+            <input type="text" id="fb" placeholder="فیس بک آئی ڈی لنک">
+            <input type="text" id="tiktok" placeholder="ٹک ٹاک آئی ڈی لنک">
+            <input type="text" id="twitter" placeholder="ٹوئٹر (X) آئی ڈی لنک">
+            <input type="text" id="insta" placeholder="انسٹاگرام آئی ڈی لنک">
+
+            <h4>📸 ممبر کی تصویر</h4>
+            <input type="file" id="photoFile" accept="image/*" onchange="previewImg(event)" required>
+
+            <h4>✍️ ڈیجیٹل دستخط اور حلف نامہ</h4>
+            <div style="background: #fff3cd; padding: 10px; border-radius: 5px; font-size: 13px; margin-bottom: 10px;">
+                <strong>حلف نامہ:</strong> میں حلفاً اقرار کرتا ہوں کہ میں بالغ ہوں، میرا کردار کلین ہے اور میں پارٹی نظم و ضبط کا پابند رہوں گا۔
+                <br><input type="checkbox" id="agree" style="width:auto;"> <label style="display:inline;" for="agree">میں حلفیہ متفق ہوں</label>
             </div>
-        </div>
+            
+            <div class="signature-area">
+                <canvas id="canvas"></canvas>
+            </div>
+            <button type="button" class="clear-btn" onclick="pad.clear()">دستخط صاف کریں</button>
 
-        <label>نیچے اپنے دستخط کریں:</label>
-        <div class="signature-pad">
-            <canvas id="canvas" style="width:100%; height:120px;"></canvas>
+            <button class="btn-main" id="submitBtn" onclick="generate()">فارم جمع کریں اور کارڈ حاصل کریں</button>
         </div>
-
-        <button class="btn-main" id="submitBtn" onclick="generate()">بیانِ حلفی جمع کریں اور کارڈ حاصل کریں</button>
     </div>
 
     <div id="idCard">
-        <div class="card-head">پاکستان پیپلز پارٹی - سہراب گوٹھ ٹاؤن</div>
-        <div class="card-body">
-            <img id="outPhoto" class="member-img">
-            <div style="flex:1; font-size: 13px;">
+        <div style="background:linear-gradient(to left, #d32f2f, #000); color:white; padding:15px; text-align:center;">
+            <h3 style="margin:0;">ڈیجیٹل ممبرشپ کارڈ</h3>
+            <small>پی پی پی سہراب گوٹھ کراچی</small>
+        </div>
+        <div style="display:flex; padding:20px; gap:20px;">
+            <img id="outPhoto" style="width:110px; height:130px; border:2px solid #000; border-radius:10px; object-fit:cover;">
+            <div style="flex:1; line-height:1.8;">
                 <p><strong>نام:</strong> <span id="outName"></span></p>
-                <p><strong>رابطہ:</strong> <span id="outPhone"></span></p>
+                <p><strong>شناختی کارڈ:</strong> <span id="outCnic"></span></p>
+                <p><strong>یو سی/وارڈ:</strong> <span id="outUc"></span></p>
                 <p><strong>آئی ڈی:</strong> <span id="outId"></span></p>
-                <p><strong>تاریخ:</strong> <span id="outDate"></span></p>
             </div>
             <div id="qr"></div>
         </div>
-        <div style="padding: 5px 15px; border-top: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
-            <div style="font-size: 10px; color: #666;">دستخط ممبر:</div>
-            <img id="outSig" style="height: 30px; max-width: 100px;">
+        <div style="padding:10px 20px; border-top:1px solid #ddd; background:#f9f9f9; display:flex; justify-content:space-between;">
+            <div style="font-size:12px;">دستخط ممبر:<br><img id="outSig" style="height:40px;"></div>
+            <div style="text-align:left; font-size:10px;">Verified Digital Member<br>Sohrab Goth Town</div>
         </div>
     </div>
 </div>
@@ -76,7 +93,6 @@
     const canvas = document.getElementById('canvas');
     const pad = new SignaturePad(canvas);
     let photoData = "";
-    // آپ کا گوگل اسکرپٹ ویب ایپ یو آر ایل
     const scriptURL = 'https://script.google.com/macros/s/AKfycbyl8xZ-eY_tAK4zzM8bGkzKfIrN7xfRirv0WeKiDy9RVazj4rEYII5DKXtGxJaEcY/exec';
 
     function previewImg(e) {
@@ -86,52 +102,50 @@
     }
 
     async function generate() {
-        const name = document.getElementById('name').value;
-        const phone = document.getElementById('phone').value;
-        const address = document.getElementById('address').value;
-        const agree = document.getElementById('agree').checked;
-        const memberId = "PPP-SG-" + Math.floor(1000 + Math.random() * 9000);
-        const today = new Date().toLocaleDateString('en-GB');
+        const fields = {
+            name: document.getElementById('name').value,
+            cnic: document.getElementById('cnic').value,
+            phone: document.getElementById('phone').value,
+            address: document.getElementById('address').value,
+            uc: document.getElementById('uc_number').value,
+            ward: document.getElementById('ward_number').value,
+            fb: document.getElementById('fb').value,
+            tiktok: document.getElementById('tiktok').value,
+            agree: document.getElementById('agree').checked
+        };
 
-        if(!name || !phone || !photoData || !agree || pad.isEmpty()) {
-            alert("براہ کرم تمام معلومات فراہم کریں، حلف نامہ ٹک کریں اور دستخط کریں.");
+        if(!fields.name || !fields.cnic || !fields.phone || !fields.uc || !photoData || !fields.agree || pad.isEmpty()) {
+            alert("براہ کرم تمام لازمی خانے پُر کریں، تصویر اپ لوڈ کریں اور دستخط مکمل کریں!");
             return;
         }
 
         const btn = document.getElementById('submitBtn');
-        btn.innerText = "پروسیسنگ...";
+        btn.innerText = "ڈیٹا شیٹ میں جمع ہو رہا ہے...";
         btn.disabled = true;
 
-        const data = { name, phone, address, memberId };
+        const memberId = "SG-M-" + Math.floor(10000 + Math.random() * 90000);
+        const postData = { ...fields, memberId, date: new Date().toLocaleString() };
 
         try {
-            // ڈیٹا گوگل شیٹ میں بھیجنا
-            await fetch(scriptURL, {
-                method: 'POST',
-                mode: 'no-cors',
-                body: JSON.stringify(data)
-            });
-
-            // کارڈ اپ ڈیٹ کرنا
-            document.getElementById('outName').innerText = name;
-            document.getElementById('outPhone').innerText = phone;
+            await fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(postData) });
+            
+            document.getElementById('outName').innerText = fields.name;
+            document.getElementById('outCnic').innerText = fields.cnic;
+            document.getElementById('outUc').innerText = fields.uc + " / " + fields.ward;
             document.getElementById('outId').innerText = memberId;
-            document.getElementById('outDate').innerText = today;
             document.getElementById('outPhoto').src = photoData;
             document.getElementById('outSig').src = pad.toDataURL();
             
             document.getElementById('idCard').style.display = 'block';
-            document.getElementById('qr').innerHTML = "";
-            new QRCode(document.getElementById("qr"), { text: memberId, width: 50, height: 50 });
-
-            alert("ریکارڈ جمع ہو گیا ہے اور آپ کا ڈیجیٹل کارڈ تیار ہے۔");
+            document.getElementById('registrationForm').style.display = 'none';
             
-        } catch (error) {
-            alert("سسٹم میں کچھ خرابی ہے، لیکن کارڈ بن رہا ہے۔");
+            document.getElementById('qr').innerHTML = "";
+            new QRCode(document.getElementById("qr"), { text: memberId, width: 70, height: 70 });
+
+            alert("مبارک ہو! آپ کا ڈیٹا شیٹ میں محفوظ ہو گیا ہے اور کارڈ جاری کر دیا گیا ہے۔");
+        } catch (e) {
+            alert("رابطے میں مسئلہ ہے، لیکن کارڈ بن رہا ہے۔");
         }
-        
-        btn.innerText = "بیانِ حلفی جمع کریں اور کارڈ حاصل کریں";
-        btn.disabled = false;
     }
 </script>
 
