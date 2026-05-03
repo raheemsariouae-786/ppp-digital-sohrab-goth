@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پی پی پی ڈیجیٹل سہراب گوٹھ - ممبرشپ پورٹل</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+    <style>
+        :root { --red: #d32f2f; --black: #000000; --green: #2e7d32; }
+        body { font-family: 'Segoe UI', Tahoma, Arial; background: #f4f4f9; direction: rtl; margin: 0; padding: 10px; }
+        .container { max-width: 600px; margin: auto; }
+        .header { background: linear-gradient(to right, var(--red), var(--black), var(--green)); color: white; padding: 25px; text-align: center; border-radius: 0 0 20px 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-top: 20px; border-top: 4px solid var(--red); }
+        label { font-weight: bold; display: block; margin-top: 15px; color: #333; }
+        input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; }
+        .signature-pad { border: 1px solid #ccc; background: #fff; border-radius: 8px; margin-top: 5px; }
+        canvas { width: 100%; height: 120px; }
+        .btn-main { background: var(--black); color: white; border: 2px solid var(--red); padding: 15px; width: 100%; border-radius: 50px; font-weight: bold; cursor: pointer; font-size: 18px; margin-top: 20px; }
+        #idCard { display: none; background: white; border: 3px solid var(--black); border-radius: 15px; overflow: hidden; margin-top: 25px; position: relative; }
+        .card-head { background: linear-gradient(to left, var(--red), var(--black), var(--green)); color: white; padding: 15px; text-align: center; }
+        .card-body { display: flex; padding: 15px; gap: 15px; }
+        .member-img { width: 110px; height: 140px; border: 2px solid #ddd; object-fit: cover; border-radius: 8px; }
+        .info { flex: 1; font-size: 14px; }
+        .stamp { position: absolute; bottom: 10px; left: 10px; width: 85px; height: 85px; border: 2px dashed #1a237e; border-radius: 50%; color: #1a237e; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 8px; font-weight: bold; transform: rotate(-15deg); opacity: 0.6; }
+        .slogan { background: #eee; text-align: center; font-size: 11px; padding: 5px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1 style="margin:0;">پی پی پی ڈیجیٹل سہراب گوٹھ</h1>
+        <p style="margin:5px 0;">میدانِ عمل ہو یا ڈیجیٹل محاذ، خدمتِ خلق ہمارا شعار</p>
+    </div>
+
+    <div class="card">
+        <h3>📝 ممبرشپ و بیانِ حلفی</h3>
+        <input type="text" id="name" placeholder="ممبر کا مکمل نام">
+        <input type="number" id="phone" placeholder="واٹس ایپ نمبر">
+        <textarea id="address" placeholder="مکمل پتہ (ایڈریس)"></textarea>
+        <label>سابقہ سیاسی سرگرمیاں اور عوامی خدمات:</label>
+        <input type="text" id="oldParty" placeholder="سابقہ پارٹی (اگر کوئی ہے)">
+        <textarea id="services" placeholder="آپ نے اب تک کیا عوامی خدمات انجام دی ہیں؟"></textarea>
+        <label>سوشل میڈیا لنک:</label>
+        <input type="text" id="socialLink" placeholder="فیس بک / ٹویٹر / ٹک ٹاک لنک">
+        <label>تصویر اپ لوڈ کریں:</label>
+        <input type="file" id="photoFile" accept="image/*" onchange="previewImg(event)">
+        <label>اصل دستخط (اسکرین پر کریں):</label>
+        <div class="signature-pad">
+            <canvas id="canvas"></canvas>
+            <button type="button" onclick="pad.clear()">صاف کریں</button>
+        </div>
+        <div style="background:#fff8e1; padding:12px; border-radius:10px; border:1px solid #ff8f00; font-size:12px; margin-top:15px;">
+            <input type="checkbox" id="agree" style="width:auto;"> 
+            <strong>بیانِ حلفی:</strong> میں حلف دیتا ہوں کہ میں کسی غیر قانونی سرگرمی یا بھتہ خوری میں ملوث نہیں ہوں۔ میں پارٹی احکامات کو سوشل میڈیا پر فعال کرنے کا پابند رہوں گا۔
+        </div>
+        <button class="btn-main" onclick="generate()">رجسٹر ہوں اور کارڈ حاصل کریں</button>
+    </div>
+
+    <div id="idCard">
+        <div class="card-head">
+            <h2 style="margin:0; font-size:18px;">پی پی پی ڈیجیٹل سہراب گوٹھ</h2>
+            <small>Pakistan Peoples Party - Sohrab Goth</small>
+        </div>
+        <div class="card-body">
+            <img id="outPhoto" class="member-img">
+            <div class="info">
+                <p><strong>نام:</strong> <span id="outName"></span></p>
+                <p><strong>رابطہ:</strong> <span id="outPhone"></span></p>
+                <p><strong>آئی ڈی:</strong> <span id="outId"></span></p>
+                <p><strong>تاریخ:</strong> <span id="outDate"></span></p>
+                <div style="margin-top:5px;">
+                    <small>دستخط ممبر:</small><br>
+                    <img id="outSign" style="width:100px; height:30px; border-bottom:1px solid #000;">
+                </div>
+            </div>
+            <div id="qr"></div>
+        </div>
+        <div class="slogan">"میدانِ عمل ہو یا ڈیجیٹل محاذ، خدمتِ خلق ہمارا شعار"</div>
+        <div class="stamp">آفس آف دی کونسلر<br>سہراب گوٹھ ٹاؤن</div>
+    </div>
+</div>
+
+<script>
+    const canvas = document.getElementById('canvas');
+    const pad = new SignaturePad(canvas);
+    let photoData = "";
+
+    function previewImg(e) {
+        const reader = new FileReader();
+        reader.onload = () => { photoData = reader.result; };
+        reader.readAsDataURL(e.target.files);
+    }
+
+    function generate() {
+        const name = document.getElementById('name').value;
+        const phone = document.getElementById('phone').value;
+        const agree = document.getElementById('agree').checked;
+
+        if(!name || !phone || !agree || pad.isEmpty() || !photoData) {
+            alert("براہ کرم تمام معلومات فراہم کریں، تصویر اور دستخط لازمی ہیں۔");
+            return;
+        }
+
+        document.getElementById('outName').innerText = name;
+        document.getElementById('outPhone').innerText = phone;
+        document.getElementById('outId').innerText = "SG-DIGI-" + Math.floor(1000 + Math.random() * 9000);
+        document.getElementById('outPhoto').src = photoData;
+        document.getElementById('outSign').src = pad.toDataURL();
+        document.getElementById('outDate').innerText = new Date().toLocaleDateString();
+
+        document.getElementById('idCard').style.display = 'block';
+
+        document.getElementById('qr').innerHTML = "";
+        new QRCode(document.getElementById("qr"), {
+            text: `PPP Digital Sohrab Goth\nMember: ${name}\nID: ${document.getElementById('outId').innerText}\nVerified: Yes`,
+            width: 75, height: 75
+        });
+
+        // واٹس ایپ میسج بھیجنے کی لاجک
+        const msg = `*نئی ممبرشپ درخواست*\nنام: ${name}\nفون: ${phone}\nحلف نامہ: منظور شدہ ✅\n_پی پی پی ڈیجیٹل سہراب گوٹھ_`;
+        const waUrl = `https://wa.me/923000000000?text=${encodeURIComponent(msg)}`; // یہاں اپنا نمبر لکھیں
+        setTimeout(() => { window.open(waUrl, '_blank'); }, 2000);
+    }
+</script>
+
+</body>
+</html>
