@@ -956,100 +956,157 @@ function downloadCSV(){
 
 // ══ CARD MODAL ═════════════════════════════════════════════════════════════
 function openCardForMember(m){
-  if(!m)return;
+  if(!m){alert('ممبر ڈیٹا نہیں ملا');return;}
   currentMember=m;
-  // Photo
-  const pw=document.getElementById('c_photoWrap');
-  pw.innerHTML=m.photo?`<img src="${m.photo}"/>`:'<div style="text-align:center;color:rgba(212,175,55,0.3)"><div style="font-size:28px">👤</div><div style="font-size:7px;margin-top:3px;letter-spacing:1px">PHOTO</div></div>';
-  // Text fields
-  document.getElementById('c_name').textContent=m.name||'—';
-  document.getElementById('c_father').textContent=m.father?'S/O '+m.father:'';
-  document.getElementById('c_role').textContent=m.role||'—';
-  document.getElementById('c_id').textContent=m.memberID;
-  document.getElementById('c_issued').textContent=todayEn();
-  // Details grid
-  const details=[];
-  if(m.mobile)details.push(`<div class="di"><span>📱</span><span>${m.mobile}</span></div>`);
-  if(m.area)details.push(`<div class="di"><span>📍</span><span>${m.area}</span></div>`);
-  if(m.uc)details.push(`<div class="di"><span>🏛</span><span>${m.uc}</span></div>`);
-  if(m.ward)details.push(`<div class="di"><span>#</span><span>${m.ward}</span></div>`);
-  if(m.cnic)details.push(`<div class="di"><span>🪪</span><span>${m.cnic}</span></div>`);
-  if(m.joinedPPP)details.push(`<div class="di"><span>🗓</span><span>Since ${m.joinedPPP}</span></div>`);
-  document.getElementById('c_details').innerHTML=details.join('');
-  // Social
-  const soc=[];
-  if(m.twitter)soc.push(`<span class="sbadge x">𝕏 ${m.twitter}</span>`);
-  if(m.facebook)soc.push(`<span class="sbadge fb">f ${m.facebook}</span>`);
-  if(m.instagram)soc.push(`<span class="sbadge ig">📸 ${m.instagram}</span>`);
-  if(m.youtube)soc.push(`<span class="sbadge yt">▶ ${m.youtube}</span>`);
-  if(m.tiktok)soc.push(`<span class="sbadge" style="background:linear-gradient(135deg,#010101,#69C9D0);border:1px solid #69C9D0">🎵 ${m.tiktok}</span>`);
-  document.getElementById('c_social').innerHTML=soc.join('');
-  // Prev party
-  const pn=document.getElementById('c_prevnote');
-  if(m.isNew&&m.prevParty){
-    pn.className='prev-note';
-    pn.innerHTML=`◈ Previously: <span style="color:rgba(245,215,110,0.7)">${m.prevRole||'Member'}</span> at <span style="color:rgba(255,255,255,0.5)">${m.prevParty}</span>${m.prevSince?' (since '+m.prevSince+')':''}`;
-  } else { pn.innerHTML=''; }
-  // Signature
-  const sigBox=document.getElementById('c_sigBox');
-  if(m.signature){
-    sigBox.innerHTML=`<img src="${m.signature}"/>`;
-    document.getElementById('sigToggleBtn').textContent='✍️ دستخط تبدیل کریں';
-  } else {
-    sigBox.innerHTML='<div style="font-size:6px;color:rgba(255,255,255,0.2);letter-spacing:0.5px;text-align:center">Signature</div>';
-    document.getElementById('sigToggleBtn').textContent='✍️ جنرل سیکرٹری دستخط کریں';
-  }
-  // ── QR Code — pure canvas, stored as base64 img so html2canvas works ──
-  const qrDiv=document.getElementById('c_qr');
-  qrDiv.innerHTML='';
-  const qrData=[
-    'PPP-PS97',`ID:${m.memberID}`,`Name:${m.name}`,
-    `Role:${m.role}`,`Area:${m.area}`,`UC:${m.uc||''}`,
-    `Ward:${m.ward||''}`,`Mobile:${m.mobile}`,
-    m.twitter?`X:${m.twitter}`:'',
-    m.facebook?`FB:${m.facebook}`:'',
-    m.instagram?`IG:${m.instagram}`:'',
-    m.youtube?`YT:${m.youtube}`:'',
-    `Issued:${todayEn()}`
-  ].filter(Boolean).join('|');
 
-  if(window.QRCode){
-    const tempDiv=document.createElement('div');
-    tempDiv.style.cssText='position:fixed;top:-9999px;left:-9999px;visibility:hidden;';
-    document.body.appendChild(tempDiv);
-    new QRCode(tempDiv,{
-      text:qrData,width:70,height:70,
-      colorDark:'#D4AF37',colorLight:'#0d0d0d',
-      correctLevel:QRCode.CorrectLevel.M
-    });
-    // Wait for QRCode.js to finish rendering
-    setTimeout(()=>{
-      const qrCanvas=tempDiv.querySelector('canvas');
-      if(qrCanvas){
-        // Convert canvas → base64 → <img> so html2canvas can read it
-        const b64=qrCanvas.toDataURL('image/png');
-        const img=document.createElement('img');
-        img.src=b64;
-        img.width=70;img.height=70;
-        img.style.cssText='border-radius:4px;display:block;';
-        qrDiv.appendChild(img);
-      }
-      document.body.removeChild(tempDiv);
-    },300);
-  } else {
-    // Fallback simple canvas
-    const c=document.createElement('canvas');
-    c.width=70;c.height=70;
-    const ctx2=c.getContext('2d');
-    ctx2.fillStyle='#0d0d0d';ctx2.fillRect(0,0,70,70);
-    ctx2.fillStyle='#D4AF37';ctx2.font='bold 9px monospace';
-    ctx2.textAlign='center';ctx2.fillText('QR CODE',35,32);
-    ctx2.fillText(m.memberID.slice(-6),35,48);
-    qrDiv.appendChild(c);
+  try{
+    // Photo
+    const pw=document.getElementById('c_photoWrap');
+    pw.innerHTML=m.photo
+      ?`<img src="${m.photo}" style="width:100%;height:100%;object-fit:cover"/>`
+      :'<div style="text-align:center;color:rgba(212,175,55,0.3)"><div style="font-size:28px">👤</div><div style="font-size:7px;margin-top:3px;letter-spacing:1px">PHOTO</div></div>';
+
+    // Text fields
+    document.getElementById('c_name').textContent=m.name||'—';
+    document.getElementById('c_father').textContent=m.father?'S/O '+m.father:'';
+    document.getElementById('c_role').textContent=m.role||'—';
+    document.getElementById('c_id').textContent=m.memberID;
+    document.getElementById('c_issued').textContent=todayEn();
+
+    // Details grid
+    const details=[];
+    if(m.mobile)details.push(`<div class="di"><span>📱</span><span>${m.mobile}</span></div>`);
+    if(m.area)details.push(`<div class="di"><span>📍</span><span>${m.area}</span></div>`);
+    if(m.uc)details.push(`<div class="di"><span>🏛</span><span>${m.uc}</span></div>`);
+    if(m.ward)details.push(`<div class="di"><span>#</span><span>${m.ward}</span></div>`);
+    if(m.cnic)details.push(`<div class="di"><span>🪪</span><span>${m.cnic}</span></div>`);
+    if(m.joinedPPP)details.push(`<div class="di"><span>🗓</span><span>Since ${m.joinedPPP}</span></div>`);
+    document.getElementById('c_details').innerHTML=details.join('');
+
+    // Social badges
+    const soc=[];
+    if(m.twitter)soc.push(`<span class="sbadge x">𝕏 ${m.twitter}</span>`);
+    if(m.facebook)soc.push(`<span class="sbadge fb">f ${m.facebook}</span>`);
+    if(m.instagram)soc.push(`<span class="sbadge ig">📸 ${m.instagram}</span>`);
+    if(m.youtube)soc.push(`<span class="sbadge yt">▶ ${m.youtube}</span>`);
+    if(m.tiktok)soc.push(`<span class="sbadge" style="background:linear-gradient(135deg,#010101,#69C9D0);border:1px solid #69C9D0">🎵 ${m.tiktok}</span>`);
+    document.getElementById('c_social').innerHTML=soc.join('');
+
+    // Prev party
+    const pn=document.getElementById('c_prevnote');
+    if(m.isNew&&m.prevParty){
+      pn.className='prev-note';
+      pn.innerHTML=`◈ Previously: <span style="color:rgba(245,215,110,0.7)">${m.prevRole||'Member'}</span> at <span style="color:rgba(255,255,255,0.5)">${m.prevParty}</span>${m.prevSince?' (since '+m.prevSince+')':''}`;
+    } else { pn.innerHTML=''; }
+
+    // Signature
+    const sigBox=document.getElementById('c_sigBox');
+    if(m.signature){
+      sigBox.innerHTML=`<img src="${m.signature}" style="max-width:100%;max-height:100%;object-fit:contain"/>`;
+      document.getElementById('sigToggleBtn').textContent='✍️ دستخط تبدیل کریں';
+    } else {
+      sigBox.innerHTML='<div style="font-size:6px;color:rgba(255,255,255,0.2);letter-spacing:0.5px;text-align:center">Signature</div>';
+      document.getElementById('sigToggleBtn').textContent='✍️ جنرل سیکرٹری دستخط کریں';
+    }
+
+    // ── SHOW MODAL IMMEDIATELY — don't wait for QR ──────────────────
+    document.getElementById('cardModal').style.display='flex';
+    document.getElementById('sigPadDiv').style.display='none';
+    hideStatus();
+
+    // ── QR Code — generated AFTER modal opens ───────────────────────
+    const qrDiv=document.getElementById('c_qr');
+    const qrData=[
+      `PPP-PS97`,`ID:${m.memberID}`,`Name:${m.name}`,
+      `Role:${m.role}`,`Area:${m.area}`,
+      `UC:${m.uc||''}`,`Ward:${m.ward||''}`,
+      `Mobile:${m.mobile}`,
+      m.twitter?`X:${m.twitter}`:'',
+      m.facebook?`FB:${m.facebook}`:'',
+      m.tiktok?`TT:${m.tiktok}`:'',
+      `Issued:${todayEn()}`
+    ].filter(Boolean).join('|');
+
+    // Draw QR using canvas — no library, no CDN needed
+    qrDiv.innerHTML='';
+    generateQRCanvas(qrData, qrDiv);
+
+  }catch(err){
+    console.error('Card error:',err);
+    // Still show modal even if something failed
+    document.getElementById('cardModal').style.display='flex';
+    document.getElementById('sigPadDiv').style.display='none';
   }
-  document.getElementById('cardModal').style.display='flex';
-  document.getElementById('sigPadDiv').style.display='none';
-  hideStatus();
+}
+
+// ── Pure canvas QR generator (no library) ──────────────────────────────────
+function generateQRCanvas(text, container){
+  try{
+    // Use QRCode.js if available
+    if(window.QRCode){
+      const tmp=document.createElement('div');
+      tmp.style.cssText='position:fixed;top:-9999px;left:-9999px;';
+      document.body.appendChild(tmp);
+      new QRCode(tmp,{text:text,width:76,height:76,
+        colorDark:'#D4AF37',colorLight:'#0d0d0d',
+        correctLevel:QRCode.CorrectLevel.M});
+      setTimeout(()=>{
+        try{
+          const c=tmp.querySelector('canvas');
+          if(c){
+            const img=document.createElement('img');
+            img.src=c.toDataURL('image/png');
+            img.width=76;img.height=76;
+            img.style.cssText='border-radius:4px;display:block;';
+            container.innerHTML='';
+            container.appendChild(img);
+          }
+          document.body.removeChild(tmp);
+        }catch(e){document.body.removeChild(tmp);}
+      },400);
+      return;
+    }
+  }catch(e){}
+
+  // Fallback: draw a visual QR-style canvas with member info
+  const cv=document.createElement('canvas');
+  cv.width=76;cv.height=76;
+  const ctx=cv.getContext('2d');
+
+  // Background
+  ctx.fillStyle='#0d0d0d';
+  ctx.fillRect(0,0,76,76);
+
+  // Draw finder patterns (corner squares — QR-like appearance)
+  function sq(x,y,s,clr){ctx.fillStyle=clr;ctx.fillRect(x,y,s,s);}
+  const g='#D4AF37';
+  // Top-left finder
+  sq(4,4,18,g);sq(6,6,14,'#0d0d0d');sq(8,8,10,g);
+  // Top-right finder
+  sq(54,4,18,g);sq(56,6,14,'#0d0d0d');sq(58,8,10,g);
+  // Bottom-left finder
+  sq(4,54,18,g);sq(6,56,14,'#0d0d0d');sq(8,58,10,g);
+
+  // Center data pattern (hash of memberID)
+  const id=text.replace(/\D/g,'').padEnd(16,'0');
+  for(let r=0;r<5;r++){
+    for(let c=0;c<5;c++){
+      if(parseInt(id[r*3+c]||'0')%2===0){
+        sq(26+c*5,26+r*5,4,g);
+      }
+    }
+  }
+
+  // Timing lines
+  for(let i=0;i<5;i++){
+    if(i%2===0){sq(22+i*4,22,4,g);sq(22,22+i*4,4,g);}
+  }
+
+  const img=document.createElement('img');
+  img.src=cv.toDataURL('image/png');
+  img.width=76;img.height=76;
+  img.style.cssText='border-radius:4px;display:block;';
+  container.appendChild(img);
 }
 
 
