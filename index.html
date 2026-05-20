@@ -550,8 +550,12 @@ label.lbl .req{font-size:10px;color:var(--red);font-weight:normal;}
         <div style="margin-top:6px">نام: <strong id="s_name"></strong></div>
       </div>
       <div class="btn-row">
-        <button class="btn-black" onclick="openCardForMember(lastSubmitted)">🪪 ممبرشپ کارڈ دیکھیں</button>
         <button class="btn-red" onclick="resetForm()">➕ نئی ممبرشپ</button>
+      </div>
+      <div style="margin-top:16px;padding:12px 16px;background:#fff8e1;border-radius:8px;border:1.5px solid #f0c040;font-size:13px;color:#7a5c00;direction:rtl;text-align:right;">
+        ✅ آپ کی ممبرشپ درج ہو گئی۔<br/>
+        کارڈ جاری کرنا صرف <strong>انفارمیشن سیکرٹری</strong> کے اختیار میں ہے۔<br/>
+        انفارمیشن سیکرٹری ایڈمن پینل سے آپ کا کارڈ بنا کر بھیجیں گے۔
       </div>
     </div>
   </div>
@@ -572,14 +576,18 @@ label.lbl .req{font-size:10px;color:var(--red);font-weight:normal;}
     <div class="section">
       <div id="adminLock" class="admin-lock">
         <div class="lock-icon">🔒</div>
-        <h3>ایڈمن پینل</h3>
+        <h3>انفارمیشن سیکرٹری پینل</h3>
+        <p style="font-size:12px;color:#888;margin-bottom:12px;direction:rtl">صرف مجاز انفارمیشن سیکرٹری ہی کارڈ جاری کر سکتے ہیں</p>
         <input type="password" id="adminPassInp" placeholder="پاس ورڈ درج کریں"
           onkeydown="if(event.key==='Enter')checkAdmin()"/>
         <button class="btn-red" style="margin:12px auto 0;display:block;padding:10px 30px;border-radius:8px;cursor:pointer;font-size:14px" onclick="checkAdmin()">داخل ہوں</button>
       </div>
       <div id="adminPanel" style="display:none">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-          <div style="font-size:15px;font-weight:bold;color:var(--red)">🔓 ایڈمن — کل: <span id="adminTotal">0</span></div>
+        <div style="background:linear-gradient(135deg,#111,#1a1a1a);border-radius:10px;padding:12px 16px;margin-bottom:16px;border:1.5px solid rgba(212,175,55,0.4);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+          <div style="color:#D4AF37;font-size:14px;font-weight:bold">✅ انفارمیشن سیکرٹری — PPP PS-97</div>
+          <div style="color:rgba(255,255,255,0.5);font-size:11px">کل ممبران: <span style="color:#D4AF37;font-weight:bold" id="adminTotal">0</span></div>
+        </div>
+        <div style="text-align:left;margin-bottom:12px">
           <button class="btn-green-sm" onclick="downloadCSV()">📥 CSV ڈاؤنلوڈ</button>
         </div>
         <div class="stat-grid" id="statGrid"></div>
@@ -677,7 +685,7 @@ label.lbl .req{font-size:10px;color:var(--red);font-weight:normal;}
           <div class="card-sig-box" id="c_sigBox">
             <div style="font-size:6px;color:rgba(255,255,255,0.2);letter-spacing:0.5px;text-align:center">Signature</div>
           </div>
-          <div class="card-sig-lbl">General Secretary<br>PPP PS-97</div>
+          <div class="card-sig-lbl">Information Secretary<br>PPP PS-97</div>
         </div>
       </div>
     </div>
@@ -696,9 +704,9 @@ label.lbl .req{font-size:10px;color:var(--red);font-weight:normal;}
 
   <!-- Signature -->
   <div id="sigSection">
-    <button class="btn-sig-toggle" id="sigToggleBtn" onclick="toggleSigPad()">✍️ جنرل سیکرٹری دستخط کریں</button>
+    <button class="btn-sig-toggle" id="sigToggleBtn" onclick="toggleSigPad()">✍️ انفارمیشن سیکرٹری دستخط کریں</button>
     <div id="sigPadDiv" style="display:none" class="sig-container">
-      <div class="sig-label">✍️ جنرل سیکرٹری — یہاں دستخط کریں</div>
+      <div class="sig-label">✍️ انفارمیشن سیکرٹری — یہاں دستخط کریں</div>
       <div class="sig-canvas-wrap">
         <canvas id="sigCanvas" width="220" height="70"></canvas>
         <div class="sig-placeholder" id="sigPlaceholder">یہاں دستخط کریں</div>
@@ -888,7 +896,7 @@ function renderMembers(){
         <div class="mmeta">🏛 ${m.uc||'—'} | # ${m.ward||'—'}</div>
         <div class="mid">${m.memberID}</div>
       </div>
-      <button class="btn-card-sm" onclick="openCardForMember(members.find(x=>x.memberID==='${m.memberID}'))">🪪 کارڈ</button>
+      <button class="btn-card-sm" style="display:none" onclick="openCardForMember(members.find(x=>x.memberID==='${m.memberID}'))">🪪 کارڈ</button>
     </div>
   `).join('');
 }
@@ -930,7 +938,7 @@ function renderAdmin(){
         <div style="color:var(--green);font-family:monospace;font-size:10px">${m.memberID}</div>
       </div>
       <div class="admin-btns">
-        <button class="btn-card-sm" onclick="openCardForMember(members[${i}])">🪪 کارڈ</button>
+        <button style="background:linear-gradient(135deg,#111,#222);color:#D4AF37;border:1.5px solid #D4AF37;padding:6px 8px;border-radius:6px;cursor:pointer;font-size:10px;font-family:var(--font-ur)" onclick="openCardForMember(members[${i}])">🪪 کارڈ جاری کریں</button>
         <button class="btn-del" onclick="deleteMember(${i})">🗑️</button>
       </div>
     </div>
@@ -1006,7 +1014,7 @@ function openCardForMember(m){
       document.getElementById('sigToggleBtn').textContent='✍️ دستخط تبدیل کریں';
     } else {
       sigBox.innerHTML='<div style="font-size:6px;color:rgba(255,255,255,0.2);letter-spacing:0.5px;text-align:center">Signature</div>';
-      document.getElementById('sigToggleBtn').textContent='✍️ جنرل سیکرٹری دستخط کریں';
+      document.getElementById('sigToggleBtn').textContent='✍️ انفارمیشن سیکرٹری دستخط کریں';
     }
 
     // ── SHOW MODAL IMMEDIATELY — don't wait for QR ──────────────────
@@ -1502,7 +1510,7 @@ async function drawCardToCanvas(){
 
   // Label below signature box
   ctx.fillStyle=GLD; ctx.font='bold 12px Arial,sans-serif'; ctx.textAlign='center';
-  ctx.fillText('General Secretary',SBX+SBW/2,SBY+SBH+18);
+  ctx.fillText('Information Secretary',SBX+SBW/2,SBY+SBH+18);
   ctx.fillStyle='rgba(255,255,255,0.6)'; ctx.font='11px Arial,sans-serif';
   ctx.fillText('PPP PS-97 · District East Karachi',SBX+SBW/2,SBY+SBH+32);
 
